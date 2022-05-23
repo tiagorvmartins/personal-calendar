@@ -1,38 +1,80 @@
-.App {
-  text-align: center;
+.day {  
+  width: 50px;
+  height: 50px;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1px;  
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.currentDay {
+  width: 50px;
+  height: 50px;
+  background: #7e7ed1;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.week {
+  display: flex;  
+  flex-direction: row;
+  width: fit-content;
+  align-items: center;
+  justify-content: flex-start;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.calendar {
+  display: flex;
+  width: fit-content;
+  flex-direction: column;  
+}
+
+.App {  
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  height:100vh;
 }
 
-.App-link {
-  color: #61dafb;
+.calendarControl {
+  display: flex;
+  width: 300px;
+  justify-content: space-around; 
+  margin-bottom: 30px;
+  align-items: center;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.monthName {
+  font-size: 18px;
+  color: rgb(70, 70, 182);
+  font-weight: bold;
+}
+
+.marked:before {
+  position: absolute;
+  content: '';
+  background: red;
+  display: block;
+  width: 100%;
+  height: 2px;
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  margin: auto;
+}
+
+.marked:after {
+  position: absolute;
+  content: '';
+  background: red;
+  display: block;
+  width: 100%;
+  height: 2px;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+  margin: auto;
 }
