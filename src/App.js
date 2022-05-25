@@ -1,51 +1,23 @@
 import './App.css';
 import { useState } from 'react';
 import * as moment from 'moment';
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
 import { IconButton } from '@mui/material';
-import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
-
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
-
-const Day = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  margin: '5px',
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-  border: '1px solid black',
-  position: 'relative',
-  width: '25px',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '25px',  
-}));
-
-const CurrentDay = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#7e7ed1',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-  border: '1px solid black',
-  width: '25px',
-  margin: '5px',
-  height: '25px',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-}));
+import Calendar from './Calendar';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 
 function App() {
 
-  const [ markedDays, setMarkedDays ] = useState({});
-  const [ today ] = useState(moment().startOf('day'));
   const [ initial, setInitial ] = useState(moment());
-
+  const currentDay = moment(initial).startOf('day');
+  const [ history, setHistory ] = useState({[initial.month()]:[]});
+  
   function nextMonth() {    
     setInitial(moment(initial.add(1, 'months')));    
   }
@@ -54,34 +26,13 @@ function App() {
     setInitial(moment(initial.subtract(1, 'months')));
   }
 
-  function markDay(date) {
-    setMarkedDays({...markedDays, [date]: true})    
+  function handleHistory(month, data) {
+    console.log(data);
+    const newHistoryArray = history[month].concat([data]);    
+    const newHistoryMonth = { [month] : newHistoryArray };
+    setHistory({ ...history, ...newHistoryMonth });
+    console.log(history);
   }
-    
-  const currentDay = moment(initial).startOf('day');  
-  const endMonth = moment(initial).endOf('month');
-  
-  let arraySquares = [];
-  const weekLines = [];
-  for(let i = 1; i <= endMonth.date(); i++){    
-    if(i === today.date() && today.month() === endMonth.month() && today.year() === endMonth.year()) {
-      arraySquares.push(<CurrentDay key={i}>{i}</CurrentDay>);
-    } else {
-      arraySquares.push(
-        <Day 
-          className={markedDays[`${i}-${endMonth.month()}-${endMonth.year()}`] === true ? 'marked' : ''}
-          onClick={() => markDay(`${i}-${endMonth.month()}-${endMonth.year()}`)} 
-          key={i}>
-          <span style={{zIndex: 5, fontSize: '22px', fontWeight: 'bold'}}>{i}</span>
-        </Day>);
-    }
-
-    if(i % 7 === 0) {      
-      weekLines.push(arraySquares.splice(0, 7));
-    }
-  }
-
-  weekLines.push([...arraySquares]);
 
   return (
     <div className="App">
@@ -96,27 +47,46 @@ function App() {
           <ChevronRight />
         </IconButton>               
       </div>
-      <Stack spacing={0.5}>
-            { 
-              weekLines.map((weekLine, i) => { 
-                return (
-                  <Grid
-                    key={i}
-                    container 
-                    columns={{ xs: 12, md: 6 }}
-                    spacing={0}                    
-                    className="week">
-                  {
-                    weekLine.map((day) => {
-                      return (day)             
-                    })                 
-                  }
+      
+      <Grid container>      
+        <Grid item xs={12} md={6}>
+          <Box display="flex" justifyContent="center">
+            <Stack spacing={0.5}>
+              <Calendar initial={initial} insertHistory={handleHistory}/>            
+            </Stack>
+          </Box>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Box display="flex" justifyContent="center">
+            <Paper style={{maxHeight: 300, overflow: 'auto', boxShadow: 'unset'}}>          
+              <List padding={3} style={{marginRight: '10px'}}>
                 
-                </Grid>
-                )
-              })
-            }
-        </Stack>
+                {              
+                history[initial.month()].sort((a,b) => a.day - b.day).map((data) => {
+                  return (
+                    <ListItem 
+                      key={data.day}
+                      sx={{
+                        backgroundColor: '#BEBEBE', 
+                        border: '1px solid black', 
+                        borderRadius: '3px', 
+                        padding: '15px',
+                        marginBottom: '10px'
+                      }}>
+                      <ListItemText
+                        primary={`Steps: ${data.steps} | Calories: ${data.calories} | Duration: ${data.duration}m`}
+                        secondary={`${data.day} ${initial.format('MMMM')} ${initial.format('YYYY')}`}
+                      />
+                    </ListItem>
+                  );
+                })}             
+                                          
+              </List>
+            </Paper>        
+          </Box>
+        </Grid>
+      </Grid>
+      
     </div>
   );
 }

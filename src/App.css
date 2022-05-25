@@ -1,22 +1,20 @@
-.day {  
-  width: 50px;
-  height: 50px;
-  border: 1px solid black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 1px;  
+::-webkit-scrollbar {
+  width: 5px;
 }
 
-.currentDay {
-  width: 50px;
-  height: 50px;
-  background: #7e7ed1;
-  border: 1px solid black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 1px;
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 .week {
@@ -38,7 +36,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height:100vh;
+  height:90vh;
+}
+
+.panel {
+  display:flex;
+  flex-direction: row;
 }
 
 .calendarControl {
@@ -53,6 +56,10 @@
   font-size: 18px;
   color: rgb(70, 70, 182);
   font-weight: bold;
+}
+
+.marked {
+  cursor: not-allowed !important;
 }
 
 .marked:before {
